@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { authAPI, setToken, removeToken, getToken, User } from '@/lib/api';
 
 interface AuthContextType {
@@ -93,12 +94,13 @@ export function ProtectedRoute({
     allowedRoles?: string[]
 }) {
     const { user, loading } = useAuth();
+    const router = useRouter();
 
     useEffect(() => {
         if (!loading && !user) {
-            window.location.href = '/auth/login';
+            router.replace('/auth/login');
         }
-    }, [user, loading]);
+    }, [user, loading, router]);
 
     if (loading) {
         return (

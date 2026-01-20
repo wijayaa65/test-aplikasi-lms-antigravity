@@ -30,10 +30,11 @@ export const removeToken = (): void => {
     localStorage.removeItem('auth_token');
 };
 
-// API client with auth headers
+// API client with auth headers and timeout
 export const apiClient = async (
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
+    timeoutMs: number = 10000
 ): Promise<Response> => {
     const token = getToken();
     const headers: Record<string, string> = {
@@ -52,12 +53,26 @@ export const apiClient = async (
         headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-        ...options,
-        headers,
-    });
+    // Create AbortController for timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-    return response;
+    try {
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+            ...options,
+            headers,
+            signal: controller.signal,
+        });
+
+        return response;
+    } catch (error: any) {
+        if (error.name === 'AbortError') {
+            throw new Error('Request timeout - server took too long to respond');
+        }
+        throw error;
+    } finally {
+        clearTimeout(timeoutId);
+    }
 };
 
 // Auth API functions

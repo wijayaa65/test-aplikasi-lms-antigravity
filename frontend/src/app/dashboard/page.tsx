@@ -11,10 +11,13 @@ function DashboardContent() {
     const { user } = useAuth();
     const [enrollments, setEnrollments] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
     useEffect(() => {
         if (user) {
             loadEnrollments();
+        } else {
+            setLoading(false);
         }
     }, [user]);
 
@@ -22,8 +25,10 @@ function DashboardContent() {
         try {
             const data = await enrollmentAPI.getMyEnrollments();
             setEnrollments(data);
-        } catch (error) {
-            console.error("Failed to load enrollments:", error);
+            setError("");
+        } catch (err: any) {
+            console.error("Failed to load enrollments:", err);
+            setError(err.message || "Failed to load enrollments");
         } finally {
             setLoading(false);
         }

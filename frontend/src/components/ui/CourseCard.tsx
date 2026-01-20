@@ -4,39 +4,47 @@ import { Star, Clock, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Suspense } from "react";
 
-interface CourseCardProps {
+interface Course {
     id: string;
     title: string;
-    instructor: string;
-    thumbnail: string;
-    rating: number;
-    students: number;
-    duration: string;
+    description?: string;
+    instructor_id?: string;
+    thumbnail_url?: string;
     price?: number;
+    published?: boolean;
+    rating?: number;
+    students?: number;
+    duration?: string;
     progress?: number;
 }
 
-export default function CourseCard({
-    id,
-    title,
-    instructor,
-    thumbnail,
-    rating,
-    students,
-    duration,
-    price,
-    progress,
-}: CourseCardProps) {
+interface CourseCardProps {
+    course: Course;
+}
+
+export default function CourseCard({ course }: CourseCardProps) {
+    const {
+        id,
+        title,
+        thumbnail_url,
+        price = 0,
+        rating = 4.5,
+        students = 0,
+        duration = "2h 30m",
+        progress,
+    } = course;
+
     return (
         <Link href={`/courses/${id}`} className="group">
             <div className="glass-card rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1 h-full flex flex-col">
                 <div className="relative aspect-video w-full overflow-hidden bg-muted">
                     <Image
-                        src={thumbnail}
+                        src={thumbnail_url || "/placeholder-course.jpg"}
                         alt={title}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        unoptimized
                     />
                     {progress !== undefined && (
                         <div className="absolute bottom-0 left-0 w-full h-1 bg-black/50">
@@ -52,7 +60,7 @@ export default function CourseCard({
                     <h3 className="font-bold text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
                         {title}
                     </h3>
-                    <p className="text-sm text-muted-foreground mb-4">{instructor}</p>
+                    <p className="text-sm text-muted-foreground mb-4">Instructor</p>
 
                     <div className="flex items-center space-x-4 text-xs text-muted-foreground mb-4">
                         <div className="flex items-center">

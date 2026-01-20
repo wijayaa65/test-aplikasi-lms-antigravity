@@ -10,19 +10,33 @@ export default function CoursesPage() {
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
     const [error, setError] = useState("");
+    const [slowLoading, setSlowLoading] = useState(false);
 
     useEffect(() => {
+        let isMounted = true;
+        const slowTimer = setTimeout(() => {
+            if (isMounted && loading) setSlowLoading(true);
+        }, 3000);
+
         loadCourses();
+
+        return () => {
+            isMounted = false;
+            clearTimeout(slowTimer);
+        };
     }, []);
 
     const loadCourses = async () => {
         try {
             const data = await courseAPI.getAll();
             setCourses(data);
+            setError("");
         } catch (err: any) {
-            setError(err.message || "Failed to load courses");
+            console.error("Failed to load courses:", err);
+            setError(err.message || "Failed to load courses. Please try again.");
         } finally {
             setLoading(false);
+            setSlowLoading(false);
         }
     };
 
