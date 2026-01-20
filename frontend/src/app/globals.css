@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(240 10% 3.9%);
+  
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(240 10% 3.9%);
+  
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(240 10% 3.9%);
+  
+  --primary: hsl(256 85% 55%);
+  --primary-foreground: hsl(0 0% 98%);
+  
+  --secondary: hsl(18 100% 55%);
+  --secondary-foreground: hsl(0 0% 98%);
+  
+  --muted: hsl(240 4.8% 95.9%);
+  --muted-foreground: hsl(240 3.8% 46.1%);
+  
+  --accent: hsl(300 100% 50%);
+  --accent-foreground: hsl(0 0% 98%);
+  
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(0 0% 98%);
+  
+  --border: hsl(240 5.9% 90%);
+  --input: hsl(240 5.9% 90%);
+  --ring: hsl(256 85% 55%);
+  
+  --radius: 0.75rem;
+}
+
+[data-theme="dark"] {
+  --background: hsl(230 35% 7%);
+  --foreground: hsl(0 0% 98%);
+  
+  --card: hsl(230 35% 9%);
+  --card-foreground: hsl(0 0% 98%);
+  
+  --popover: hsl(230 35% 9%);
+  --popover-foreground: hsl(0 0% 98%);
+  
+  --primary: hsl(256 85% 65%);
+  --primary-foreground: hsl(0 0% 98%);
+  
+  --secondary: hsl(18 100% 60%);
+  --secondary-foreground: hsl(0 0% 98%);
+  
+  --muted: hsl(230 25% 15%);
+  --muted-foreground: hsl(240 5% 64.9%);
+  
+  --accent: hsl(300 100% 60%);
+  --accent-foreground: hsl(0 0% 98%);
+  
+  --destructive: hsl(0 62.8% 30.6%);
+  --destructive-foreground: hsl(0 0% 98%);
+  
+  --border: hsl(230 25% 15%);
+  --input: hsl(230 25% 15%);
+  --ring: hsl(256 85% 65%);
+}
+
+@layer base {
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    @apply antialiased;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(to right, var(--primary), var(--secondary));
+  }
+}
