@@ -9,6 +9,35 @@ export interface User {
     avatar?: string;
 }
 
+export interface CourseLesson {
+    id: string;
+    section_id: string;
+    title: string;
+    content?: string;
+    video_url?: string;
+    duration: number;
+    order_index: number;
+}
+
+export interface CourseSection {
+    id: string;
+    course_id: string;
+    title: string;
+    order_index: number;
+    course_lessons: CourseLesson[];
+}
+
+export interface Course {
+    id: string;
+    title: string;
+    description?: string;
+    instructor_id?: string;
+    thumbnail_url?: string;
+    price?: number;
+    published?: boolean;
+    course_sections?: CourseSection[];
+}
+
 export interface AuthResponse {
     message: string;
     user: User | null;
@@ -89,9 +118,9 @@ export const authAPI = {
     },
 };
 
-// Course API functions
+
 export const courseAPI = {
-    async getAll(): Promise<any[]> {
+    async getAll(): Promise<Course[]> {
         const { data, error } = await supabase
             .from('courses')
             .select('*');
@@ -100,14 +129,40 @@ export const courseAPI = {
         return data || [];
     },
 
-    async getById(id: string): Promise<any> {
+    async getById(id: string): Promise<Course> {
         const { data, error } = await supabase
             .from('courses')
-            .select('*')
+            .select(`
+                *,
+                course_sections (
+                    id,
+                    title,
+                    order_index,
+                    course_lessons (
+                        id,
+                        title,
+                        duration,
+                        order_index,
+                        video_url,
+                        content
+                    )
+                )
+            `)
             .eq('id', id)
             .single();
 
         if (error) throw new Error(error.message);
+
+        // Sort sections and lessons by order_index
+        if (data && data.course_sections) {
+            data.course_sections.sort((a: any, b: any) => a.order_index - b.order_index);
+            data.course_sections.forEach((section: any) => {
+                if (section.course_lessons) {
+                    section.course_lessons.sort((a: any, b: any) => a.order_index - b.order_index);
+                }
+            });
+        }
+
         return data;
     },
 

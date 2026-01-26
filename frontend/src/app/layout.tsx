@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Navbar from "@/components/ui/Navbar";
+import Footer from "@/components/ui/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +41,7 @@ export default function RootLayout({
             <div className="relative flex min-h-screen flex-col">
               <Navbar />
               <main className="flex-1">{children}</main>
+              <Footer />
             </div>
           </AuthProvider>
         </ThemeProvider>
